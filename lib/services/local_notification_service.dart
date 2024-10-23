@@ -79,6 +79,5 @@ class LocalNotificationService {
       uiLocalNotificationDateInterpretation:
       UILocalNotificationDateInterpretation.absoluteTime,
     );
-    await flutterLocalNotificationsPlugin.cancel(2); // Canceling using the same ID
   }
 }
