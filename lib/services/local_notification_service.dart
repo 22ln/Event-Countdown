@@ -29,12 +29,13 @@ class LocalNotificationService {
   //basic Notification
   static void showBasicNotification() async {
     AndroidNotificationDetails android = AndroidNotificationDetails(
-        'id 1', 'basic notification',
-        importance: Importance.max,
-        priority: Priority.high,
+      'id 1',
+      'basic notification',
+      importance: Importance.max,
+      priority: Priority.high,
     );
-        NotificationDetails details = NotificationDetails(
-        android: android,
+    NotificationDetails details = NotificationDetails(
+      android: android,
     );
     await flutterLocalNotificationsPlugin.show(
       0,
@@ -65,17 +66,19 @@ class LocalNotificationService {
     log(tz.TZDateTime.now(tz.local).hour.toString());
 
     // Get the date at 00:00 on the event date
-    final scheduledDate = tz.TZDateTime(tz.local, eventDate.year, eventDate.month, eventDate.day);
+    final scheduledDate =
+    tz.TZDateTime(tz.local, eventDate.year, eventDate.month, eventDate.day);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        2,
-        'Event Reminder',
-        'Check today\'s Event',
-        scheduledDate,
-        details,
-        payload: 'zonedSchedule',
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime,
-        );
-   }
+      2,
+      'Event Reminder',
+      'Check today\'s Event',
+      scheduledDate,
+      details,
+      payload: 'zonedSchedule',
+      uiLocalNotificationDateInterpretation:
+      UILocalNotificationDateInterpretation.absoluteTime,
+    );
+    await flutterLocalNotificationsPlugin.cancel(2); // Canceling using the same ID
+  }
 }

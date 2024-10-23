@@ -1,4 +1,5 @@
 import 'package:event/services/local_notification_service.dart';
+import 'package:event/view_models/Notification_View_Model.dart';
 import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:provider/provider.dart';
@@ -13,8 +14,13 @@ void main() async {
   runApp(
     DevicePreview(
       enabled: false, // Set this to true to enable device preview
-      builder: (context) => ChangeNotifierProvider(
-        create: (_) => EventViewModel(), // Provide the EventViewModel here
+      builder: (context) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => EventViewModel()),
+          // Provide the EventViewModel here
+          ChangeNotifierProvider(create: (_) => NotificationViewModel()),
+          // Provide the NotificationViewModel here
+        ],
         child: const EventCountdownApp(),
       ),
     ),

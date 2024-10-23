@@ -1,5 +1,7 @@
+import 'package:event/view_models/Notification_View_Model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../services/local_notification_service.dart';
 
@@ -21,6 +23,8 @@ class EventCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final notificationViewModel = Provider.of<NotificationViewModel>(
+        context); // Access the NotificationViewModel
 
     return Card(
       elevation: 8,
@@ -110,26 +114,36 @@ class EventCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 10),
-
                 ElevatedButton(
                   onPressed: () {
-                    // Schedule the notification when the button is pressed
-                    DateTime selectedDates = DateTime.now();
-                    LocalNotificationService.showScheduledNotification(selectedDates);
+                    // Toggle notification state
+                    notificationViewModel.toggleNotification(
+                        eventDate); // Call the method on the instance
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal, // Button background color
+                    backgroundColor: notificationViewModel.isNotificationOn
+                        ? Colors.green // Color when enabled
+                        : Colors.red, // Color when disabled
                     foregroundColor: Colors.white, // Button text color
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20), // Rounded corners
+                      borderRadius:
+                          BorderRadius.circular(20), // Rounded corners
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      const Icon(Icons.notifications, color: Colors.white, size: 20), // Icon
-                      const SizedBox(width: 3),  // Spacing between icon and text
-                      const Text('Notification', style: TextStyle(fontSize: 12)), // Button text
+                      Icon(Icons.notifications, color: Colors.white, size: 20),
+                      // Icon
+                      SizedBox(width: 3),
+                      // Spacing between icon and text
+                      Text(
+                        notificationViewModel.isNotificationOn
+                            ? 'ON'
+                            : 'OFF', // Button text
+                        style: TextStyle(fontSize: 12),
+                      ),
                     ],
                   ),
                 ),
