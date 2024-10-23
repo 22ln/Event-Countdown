@@ -3,24 +3,26 @@ import 'package:event/services/local_notification_service.dart';
 import 'package:flutter/material.dart';
 
 class NotificationViewModel extends ChangeNotifier {
-  bool _isNotificationOn = false;
+  // Store notification state for each event by their ID
+  final Map<int, bool> _notificationStates = {};
 
-  bool get isNotificationOn => _isNotificationOn;
+  bool isNotificationOn(int eventId) => _notificationStates[eventId] ?? false;
 
-  void toggleNotification(DateTime eventDate) {
-    _isNotificationOn = !_isNotificationOn; // Toggle the notification state
+  void toggleNotification(int eventId, DateTime eventDate) {
+    // Toggle the notification state for the specific event ID
+    _notificationStates[eventId] = !isNotificationOn(eventId);
 
     // Debug log to verify the state
-    log('Notification state changed: $_isNotificationOn'); // Use log from dart:developer
+    log('Notification state changed for event $eventId: ${_notificationStates[eventId]}');
 
-    if (_isNotificationOn) {
+    if (_notificationStates[eventId]!) {
       // Schedule notification if it's being turned on
       LocalNotificationService.showScheduledNotification(eventDate);
-      log('Notification scheduled for: $eventDate'); // Use log from dart:developer
+      log('Notification scheduled for event $eventId: $eventDate');
     } else {
       // Cancel the notification
-      LocalNotificationService.flutterLocalNotificationsPlugin.cancel(2);
-      log('Notification canceled'); // Use log from dart:developer
+      LocalNotificationService.flutterLocalNotificationsPlugin.cancel(eventId);
+      log('Notification canceled for event $eventId');
     }
 
     notifyListeners(); // Notify listeners about the change

@@ -11,6 +11,7 @@ class EventCard extends StatelessWidget {
   final String countdown;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final int eventId; // Add this to uniquely identify each event
 
   EventCard({
     required this.eventName,
@@ -18,6 +19,7 @@ class EventCard extends StatelessWidget {
     required this.countdown,
     required this.onEdit,
     required this.onDelete,
+    required this.eventId, // Pass the event ID
   });
 
   @override
@@ -116,21 +118,20 @@ class EventCard extends StatelessWidget {
                 const SizedBox(width: 10),
                 ElevatedButton(
                   onPressed: () {
-                    // Toggle notification state
-                    notificationViewModel.toggleNotification(
-                        eventDate); // Call the method on the instance
+                    // Toggle notification state for this specific event ID
+                    notificationViewModel.toggleNotification(eventId, eventDate); // Call the method on the instance
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: notificationViewModel.isNotificationOn
+                    backgroundColor: notificationViewModel.isNotificationOn(eventId)
                         ? Colors.green // Color when enabled
-                        : Colors.red, // Color when disabled
+                        : Colors.red,  // Color when disabled
                     foregroundColor: Colors.white, // Button text color
                     shape: RoundedRectangleBorder(
                       borderRadius:
-                          BorderRadius.circular(20), // Rounded corners
+                      BorderRadius.circular(20), // Rounded corners
                     ),
                     padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                   ),
                   child: Row(
                     children: [
@@ -139,7 +140,7 @@ class EventCard extends StatelessWidget {
                       SizedBox(width: 3),
                       // Spacing between icon and text
                       Text(
-                        notificationViewModel.isNotificationOn
+                        notificationViewModel.isNotificationOn(eventId)
                             ? 'ON'
                             : 'OFF', // Button text
                         style: TextStyle(fontSize: 12),

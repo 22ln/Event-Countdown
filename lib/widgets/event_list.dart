@@ -17,36 +17,37 @@ class EventList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-  
+
     final screenSize = MediaQuery.of(context).size;
     final isLargeScreen = screenSize.width > 600;
 
     return eventViewModel.events.isEmpty
         ? Center(
-            child: SvgPicture.asset(
-              'lib/assets/images/Event_pic.svg',
-              height: isLargeScreen ? screenSize.height * 0.3 : screenSize.height * 0.2, 
-              width: isLargeScreen ? screenSize.width * 0.3 : screenSize.width * 0.2,  
-            ),
-          )
+      child: SvgPicture.asset(
+        'lib/assets/images/Event_pic.svg',
+        height: isLargeScreen ? screenSize.height * 0.3 : screenSize.height * 0.2,
+        width: isLargeScreen ? screenSize.width * 0.3 : screenSize.width * 0.2,
+      ),
+    )
         : ListView.builder(
-            itemCount: eventViewModel.events.length,
-            itemBuilder: (context, index) {
-              final event = eventViewModel.events[index];
-              return Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: screenSize.height * 0.001,
-              //    horizontal: screenSize.width * 0.05, 
-                ),
-                child: EventCard(
-                  eventName: event.name,
-                  eventDate: event.date,
-                  countdown: eventViewModel.getCountdown(event.date),
-                  onEdit: () => onEdit(context, index, event.name, event.date),
-                  onDelete: () => onDelete(event.id!),
-                ),
-              );
-            },
-          );
+      itemCount: eventViewModel.events.length,
+      itemBuilder: (context, index) {
+        final event = eventViewModel.events[index];
+        return Padding(
+          padding: EdgeInsets.symmetric(
+            vertical: screenSize.height * 0.001,
+            //    horizontal: screenSize.width * 0.05,
+          ),
+          child: EventCard(
+            eventName: event.name,
+            eventDate: event.date,
+            countdown: eventViewModel.getCountdown(event.date),
+            onEdit: () => onEdit(context, index, event.name, event.date),
+            onDelete: () => onDelete(event.id!),
+            eventId: event.id!, // Pass the event ID here
+          ),
+        );
+      },
+    );
   }
 }
